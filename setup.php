@@ -59,3 +59,21 @@ function plugin_advtickets_check_prerequisites() {
    }
    return true;
 }
+
+/**
+ * Check configuration process
+ *
+ * @param boolean $verbose Whether to display message on failure. Defaults to false
+ *
+ * @return boolean
+ */
+function plugin_advtickets_check_config($verbose = false) {
+    if (true) { // Your configuration check
+        return true;
+    }
+
+    if ($verbose) {
+        echo __('Installed / not configured', 'advtickets');
+    }
+    return false;
+}
