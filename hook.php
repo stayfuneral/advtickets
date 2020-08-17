@@ -6,8 +6,6 @@
  * @return boolean
  */
 function plugin_advtickets_install() {
-   plugin_advticket_autoload_classes();
-   Adv\Database::installDbTables();
    return true;
 }
 
@@ -17,36 +15,15 @@ function plugin_advtickets_install() {
  * @return boolean
  */
 function plugin_advtickets_uninstall() {
-    plugin_advticket_autoload_classes();
-    Adv\Database::uninstallDbTables();
     return true;
 }
 
 /**
- * @param Ticket $item
+ * @param Ticket $ticket
+ *
+ * @return bool
  */
-function plugin_advtickets_item_add_ticket(Ticket $item) {
-    plugin_advticket_autoload_classes();
-
-    Adv\Event::getInstance()->handleNewTicket($item);
-}
-
-/**
- * @param Ticket $item
- */
-function plugin_advtickets_item_update_ticket(Ticket $item)
+function plugin_advtickets_pre_item_add(Ticket $ticket)
 {
-    plugin_advticket_autoload_classes();
-
-    Adv\Event::getInstance()->handleUpdatedTicket($item);
-
-    Session::addMessageAfterRedirect('Updated ticket:' . $item->getID());
-}
-
-/**
- * Вызывает автозагрузчик composer
- */
-function plugin_advticket_autoload_classes()
-{
-    require __DIR__ . '/vendor/autoload.php';
+    return PluginAdvticketsEvent::pre_item_add_ticket($ticket);
 }

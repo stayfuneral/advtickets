@@ -29,9 +29,6 @@
 define('PLUGIN_ADVTICKETS_VERSION', '1.0.0');
 define('PLUGIN_ADVTICKETS_NAME', 'advtickets');
 
-use Adv\Setup;
-
-require __DIR__ . '/vendor/autoload.php';
 /**
  * Init hooks of the plugin.
  * REQUIRED
@@ -41,19 +38,13 @@ require __DIR__ . '/vendor/autoload.php';
 function plugin_init_advtickets() {
    global $PLUGIN_HOOKS;
 
+   Plugin::registerClass(PluginAdvticketsEvent::class);
+
    $PLUGIN_HOOKS['csrf_compliant'][PLUGIN_ADVTICKETS_NAME] = true;
-   $PLUGIN_HOOKS['config_page'][PLUGIN_ADVTICKETS_NAME] = 'config.php';
 
-    foreach (Setup::$hooksFunctions as $item => $params) {
-
-        foreach ($params as $hook => $function) {
-            $PLUGIN_HOOKS[$hook][PLUGIN_ADVTICKETS_NAME] = [
-                $item => $function
-            ];
-        }
-
-   }
-
+   $PLUGIN_HOOKS['pre_item_add'][PLUGIN_ADVTICKETS_NAME] = [
+       Ticket::class => 'plugin_advtickets_pre_item_add'
+   ];
 }
 
 
@@ -69,7 +60,7 @@ function plugin_version_advtickets() {
       'version'        => PLUGIN_ADVTICKETS_VERSION,
       'author'         => 'Roman Gonyukov',
       'license'        => '',
-      'homepage'       => '',
+      'homepage'       => 'https://github.com/stayfuneral/advtickets',
       'requirements'   => [
          'glpi' => [
             'min' => '9.2',
